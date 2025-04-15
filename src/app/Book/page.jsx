@@ -1,4 +1,4 @@
-"use client"; // i am using use client here because the nextjs router needs to know if we need to use hook from client side
+'use client'; // i am using use client here because the nextjs router needs to know if we need to use hook from client side
 import BookCard from '@/components/book/BookCard';
 import { fetchBooks } from '@/services/GutendexApi';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -62,9 +62,11 @@ function Book() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, [next, isLoading]);
-
+    function LoadingFallback() {
+        return <div>Loading search parameters...</div>;
+    }
     return (
-        <Suspense>
+        <Suspense fallback={<LoadingFallback />}>
             <div className="bg-[#FFF] w-full h-full flex justify-center">
                 <div className='md:w-[75%] w-full h-full p-[20px] md:p-0 md:mt-[5%]'>
                     <div className='flex gap-4 items-center'>

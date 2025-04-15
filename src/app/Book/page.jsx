@@ -1,9 +1,11 @@
-"use client";
+"use client"; // i am using use client here because the nextjs router needs to know if we need to use hook from client side
 import BookCard from '@/components/book/BookCard';
 import { fetchBooks } from '@/services/GutendexApi';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
+
+//i am using throttling here so that we can get the data after a certain time
 const throttle = (fn, limit) => {
     let inThrottle;
     return function () {
@@ -26,8 +28,8 @@ function Book() {
     const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
-
-    const loadBooks = async () => {
+    //here i am calling the api which is been declared in other place
+    const gettingBooks = async () => {
         setIsLoading(true);
         const result = await fetchBooks({ page, category, search });
         setBooks(prev => [...prev, ...result.results]);
@@ -41,16 +43,17 @@ function Book() {
     }, [category, search]);
 
     useEffect(() => {
-        loadBooks();
+        gettingBooks();
     }, [page]);
 
+    //i am getting the info of user scrolling the page or not , i am getting the data from window object 
     useEffect(() => {
         const handleScroll = throttle(() => {
-            const scrollTop = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const fullHeight = document.documentElement.scrollHeight;
+            const userScrollPosition = window.scrollY;
+            const windowHeight = window.innerHeight; // this is the viewport of the users window
+            const fullHeight = document.documentElement.scrollHeight; // this is total document height
 
-            if (scrollTop + windowHeight >= fullHeight - 300 && next && !isLoading) {
+            if (userScrollPosition + windowHeight >= fullHeight - 300 && next && !isLoading) {
                 setPage(prev => prev + 1);
             }
         }, 300);
@@ -86,7 +89,7 @@ function Book() {
                         </div>
                     )}
                 </div>
-
+                    {/* this is where all the books are displayed */}
                 <div className="w-full h-full bg-[#f8f7ff] flex flex-wrap gap-2 md:gap-[42px] mt-[20px] pt-[20px] justify-center">
                     {books.map((item, index) => (
                         <div key={index} className='w-[114px]'>

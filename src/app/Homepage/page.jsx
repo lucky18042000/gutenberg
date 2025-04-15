@@ -5,8 +5,8 @@ import React from 'react'
 const HomePage = () => {
     return (
         <div className='bg-[#f8f7ff] h-screen w-screen'>
-            <Hero/>
-            <CategoryGrid/>
+            <Hero />
+            <CategoryGrid />
         </div>
     )
 }
